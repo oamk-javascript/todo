@@ -1,8 +1,7 @@
 class Task {
-  constructor(id, text,checked) {
+  constructor(id, text) {
     this.id = id
     this.text = text
-    this.checked = checked
   }
 }
 

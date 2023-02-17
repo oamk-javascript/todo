@@ -2,3 +2,12 @@ a {
   text-decoration: none;
   color: #000;
 }
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+form {
+  margin-bottom: 20px;
+}

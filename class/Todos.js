@@ -1,15 +1,16 @@
 import { Task } from "./Task.js"
 
 class Todos {
-  #url = 'http://localhost:3001'
+  #backenend_url = ''
 
-  constructor() {
+  constructor(url) {
     this.tasks = []
+    this.#backenend_url = url
   }
 
   getTasks = async() => {
     return new Promise(async (resolve,reject) => {
-      axios.get(this.#url)
+      axios.get(this.#backenend_url)
         .then(response => {
           this.#readJson(response.data)
           resolve(this.tasks)
@@ -22,7 +23,7 @@ class Todos {
 
   #readJson(tasksAsJson) {
     tasksAsJson.forEach(element => {
-      const task = new Task(element.id,element.description,false)
+      const task = new Task(element.id,element.description)
       this.tasks.push(task)
     }); 
   }
@@ -31,12 +32,12 @@ class Todos {
     return new Promise(async (resolve,reject) => {
       const json = JSON.stringify({description:text})
       try {
-        const response = await axios.post(this.#url + '/new',json, {
+        const response = await axios.post(this.#backenend_url + '/new',json, {
           headers: {
             'Content-Type' : 'application/json'
           }
         })
-        resolve(this.#addToArray(response.data.id,text,false))
+        resolve(this.#addToArray(response.data.id,text))
       } catch (error) {
         console.log(error)
         reject("Error adding new task!")
@@ -44,15 +45,15 @@ class Todos {
     })
   }
 
-  #addToArray(id,text,checked) {
-    const task=new Task(id,text,checked)
+  #addToArray(id,text) {
+    const task=new Task(id,text)
     this.tasks.push(task)
     return task
   }
 
   removeTask = (id) => {
     return new Promise(async (resolve,reject) => {
-      axios.delete(this.#url + '/delete/' + id)
+      axios.delete(this.#backenend_url + '/delete/' + id)
         .then(response => {
           this.#removeFromArray(id)
           resolve(response.data.id)
